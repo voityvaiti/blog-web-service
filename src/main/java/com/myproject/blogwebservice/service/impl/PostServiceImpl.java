@@ -5,7 +5,9 @@ import com.myproject.blogwebservice.repository.PostRepository;
 import com.myproject.blogwebservice.service.abstraction.PostService;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class PostServiceImpl implements PostService {
@@ -19,5 +21,18 @@ public class PostServiceImpl implements PostService {
     @Override
     public List<Post> getAll() {
         return postRepository.findAll();
+    }
+
+    @Override
+    public Post getById(UUID id) {
+        return postRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public Post create(Post post) {
+
+        post.setPublicationDateTime(LocalDateTime.now());
+
+        return postRepository.save(post);
     }
 }
