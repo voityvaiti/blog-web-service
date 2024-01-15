@@ -2,11 +2,13 @@ package com.myproject.blogwebservice.controller;
 
 import com.myproject.blogwebservice.entity.Post;
 import com.myproject.blogwebservice.service.abstraction.PostService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/posts")
@@ -20,7 +22,21 @@ public class PostController {
 
 
     @GetMapping
-    public List<Post> getAllPosts() {
-        return postService.getAll();
+    public ResponseEntity<List<Post>> getAll() {
+        return ResponseEntity.ok(postService.getAll());
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Post> get(@PathVariable UUID id) {
+        return ResponseEntity.ok(postService.getById(id));
+    }
+
+    @PostMapping
+    public ResponseEntity<Post> create(@RequestBody @Valid Post post) {
+
+        Post createdPost = postService.create(post);
+
+        return new ResponseEntity<>(createdPost, HttpStatus.CREATED);
+    }
+
 }
