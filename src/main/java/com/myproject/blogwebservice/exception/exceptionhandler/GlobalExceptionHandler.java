@@ -1,4 +1,4 @@
-package com.myproject.blogwebservice.exceptionhandler;
+package com.myproject.blogwebservice.exception.exceptionhandler;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
