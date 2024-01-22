@@ -39,4 +39,12 @@ public class PostController {
         return new ResponseEntity<>(createdPost, HttpStatus.CREATED);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable UUID id) {
+
+        postService.delete(id);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 }

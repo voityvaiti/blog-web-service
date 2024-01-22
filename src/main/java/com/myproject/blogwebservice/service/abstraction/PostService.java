@@ -12,4 +12,6 @@ public interface PostService {
     Post getById(UUID id);
 
     Post create(Post post);
+
+    void delete(UUID id);
 }

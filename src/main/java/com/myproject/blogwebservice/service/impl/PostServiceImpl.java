@@ -36,4 +36,14 @@ public class PostServiceImpl implements PostService {
 
         return postRepository.save(post);
     }
+
+    @Override
+    public void delete(UUID id) {
+
+        postRepository.findById(id)
+                .ifPresentOrElse(
+                        post -> postRepository.deleteById(id),
+                        () -> { throw new ResourceNotFoundException("Not found Post to delete with ID:" + id); }
+                );
+    }
 }
