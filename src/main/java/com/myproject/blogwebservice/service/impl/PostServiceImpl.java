@@ -1,6 +1,7 @@
 package com.myproject.blogwebservice.service.impl;
 
 import com.myproject.blogwebservice.entity.Post;
+import com.myproject.blogwebservice.exception.ResourceNotFoundException;
 import com.myproject.blogwebservice.repository.PostRepository;
 import com.myproject.blogwebservice.service.abstraction.PostService;
 import org.springframework.stereotype.Service;
@@ -25,7 +26,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Post getById(UUID id) {
-        return postRepository.findById(id).orElse(null);
+        return postRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Post not found with ID: " + id));
     }
 
     @Override
