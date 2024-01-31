@@ -4,6 +4,7 @@ import com.myproject.blogwebservice.entity.Post;
 import com.myproject.blogwebservice.exception.ResourceNotFoundException;
 import com.myproject.blogwebservice.repository.PostRepository;
 import com.myproject.blogwebservice.service.abstraction.PostService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -11,13 +12,11 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
 
-    public PostServiceImpl(PostRepository postRepository) {
-        this.postRepository = postRepository;
-    }
 
     @Override
     public List<Post> getAll() {

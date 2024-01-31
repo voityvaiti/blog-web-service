@@ -3,6 +3,7 @@ package com.myproject.blogwebservice.controller;
 import com.myproject.blogwebservice.entity.Post;
 import com.myproject.blogwebservice.service.abstraction.PostService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,13 +13,10 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("${api-prefix}/posts")
+@RequiredArgsConstructor
 public class PostController {
 
     private final PostService postService;
-
-    public PostController(PostService postService) {
-        this.postService = postService;
-    }
 
 
     @GetMapping
