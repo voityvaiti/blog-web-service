@@ -2,6 +2,7 @@ package com.myproject.blogwebservice.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -36,6 +37,11 @@ public class Post {
 
     @Column(name = "publication_datetime")
     private LocalDateTime publicationDateTime;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    @NotNull
+    private AppUser user;
 
     @Override
     public boolean equals(Object o) {
