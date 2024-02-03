@@ -1,9 +1,8 @@
 package com.myproject.blogwebservice.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +23,8 @@ public class AppUser {
     private String username;
 
     @Column(name = "password")
+    @ToString.Exclude
+    @JsonIgnore
     private String password;
 
     @Column(name = "role")
@@ -34,7 +35,9 @@ public class AppUser {
     private String nickname;
 
     @OneToMany(mappedBy = "user")
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @JsonIgnore
     private List<Post> posts = new ArrayList<>();
-
 
 }
