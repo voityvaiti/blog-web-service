@@ -3,6 +3,7 @@ package com.myproject.blogwebservice.exception.exceptionhandler;
 import com.myproject.blogwebservice.exception.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -38,6 +39,13 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Object> handleResourceNotFound(ResourceNotFoundException ex) {
 
         return new ResponseEntity<>(new ErrorDetailsDto(LocalDateTime.now(), ex.getMessage()), HttpStatus.NOT_FOUND);
+    }
+
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<Object> handleBadCredentials() {
+
+        return new ResponseEntity<>(new ErrorDetailsDto(LocalDateTime.now(), "Wrong credentials!"), HttpStatus.UNAUTHORIZED);
     }
 
 }
