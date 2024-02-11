@@ -1,6 +1,9 @@
 package com.myproject.blogwebservice.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.myproject.blogwebservice.validation.annotation.NicknameConstraints;
+import com.myproject.blogwebservice.validation.annotation.PasswordConstraints;
+import com.myproject.blogwebservice.validation.annotation.UsernameConstraints;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,11 +23,13 @@ public class AppUser {
     private UUID id;
 
     @Column(name = "username", unique = true)
+    @UsernameConstraints
     private String username;
 
     @Column(name = "password")
     @ToString.Exclude
     @JsonIgnore
+    @PasswordConstraints
     private String password;
 
     @Column(name = "role")
@@ -32,6 +37,7 @@ public class AppUser {
     private Role role;
 
     @Column(name = "nickname")
+    @NicknameConstraints
     private String nickname;
 
     @OneToMany(mappedBy = "user")
