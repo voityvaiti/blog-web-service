@@ -1,12 +1,14 @@
 package com.myproject.blogwebservice.security;
 
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.security.SignatureException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -14,12 +16,13 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
 public class JwtRequestFilter extends OncePerRequestFilter {
 
-    private static final String AUTH_HEADER_KEY = "Authorization";
     private static final String AUTH_HEADER_VALUE_START = "Bearer ";
 
 
@@ -29,29 +32,33 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
-        String authHeader = request.getHeader(AUTH_HEADER_KEY);
+        String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+
+        if (authHeader == null || !authHeader.startsWith(AUTH_HEADER_VALUE_START)) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        String jwt = authHeader.substring(AUTH_HEADER_VALUE_START.length());
         String username = null;
-        String jwt = null;
 
-        if (authHeader != null && authHeader.startsWith(AUTH_HEADER_VALUE_START)) {
-            jwt = authHeader.substring(AUTH_HEADER_VALUE_START.length());
+        try {
+            username = jwtTokenUtil.getUsername(jwt);
 
-            try {
-                username = jwtTokenUtil.getUsername(jwt);
-
-            } catch (ExpiredJwtException | SignatureException e) {
-                e.printStackTrace();
-            }
+        } catch (ExpiredJwtException | SignatureException | MalformedJwtException e) {
+            filterChain.doFilter(request, response);
+            return;
         }
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
+            List<String> roles = jwtTokenUtil.getRoles(jwt);
+
             UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
                     username,
                     null,
-                    jwtTokenUtil.getRoles(jwt).stream().map(SimpleGrantedAuthority::new).toList()
+                    roles != null ? roles.stream().map(SimpleGrantedAuthority::new).toList() : Collections.emptyList()
             );
-
             SecurityContextHolder.getContext().setAuthentication(token);
         }
 
