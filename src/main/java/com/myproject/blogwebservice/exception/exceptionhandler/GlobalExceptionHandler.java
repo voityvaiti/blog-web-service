@@ -2,6 +2,10 @@ package com.myproject.blogwebservice.exception.exceptionhandler;
 
 import com.myproject.blogwebservice.exception.ResourceNotFoundException;
 import com.myproject.blogwebservice.exception.UserDuplicationException;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.security.SignatureException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -35,15 +39,20 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<Object> handleNotFoundError(ResourceNotFoundException ex) {
+    public ResponseEntity<Object> handleResourceNotFoundException(ResourceNotFoundException ex) {
 
         return new ResponseEntity<>(new ErrorDetailsDto(LocalDateTime.now(), ex.getMessage()), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity<Object> handleUnauthorizedError() {
+    public ResponseEntity<Object> handleBadCredentialsException() {
 
         return new ResponseEntity<>(new ErrorDetailsDto(LocalDateTime.now(), "Wrong credentials!"), HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler({ExpiredJwtException.class, MalformedJwtException.class, SignatureException.class})
+    public ResponseEntity<Object> handleJwtExceptions(JwtException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
     }
 
 }
