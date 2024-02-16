@@ -8,12 +8,15 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -27,6 +30,10 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
 
     private final JwtTokenUtil jwtTokenUtil;
+
+    @Autowired
+    @Qualifier("handlerExceptionResolver")
+    private HandlerExceptionResolver exceptionResolver;
 
 
     @Override
@@ -46,8 +53,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             username = jwtTokenUtil.getUsername(jwt);
 
         } catch (ExpiredJwtException | SignatureException | MalformedJwtException e) {
-            filterChain.doFilter(request, response);
-            return;
+            exceptionResolver.resolveException(request, response, null, e);
         }
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
