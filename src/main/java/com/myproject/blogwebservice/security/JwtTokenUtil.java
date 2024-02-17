@@ -1,6 +1,6 @@
 package com.myproject.blogwebservice.security;
 
-import io.jsonwebtoken.*;
+import  io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
@@ -48,15 +48,15 @@ public class JwtTokenUtil {
     }
 
     public String getUsername(String token) {
-        return getClaimsFromToken(token).getSubject();
+        return getClaims(token).getSubject();
     }
 
     public List<String> getRoles(String token) {
-        return getClaimsFromToken(token).get(ROLES_CLAIM, List.class);
+        return getClaims(token).get(ROLES_CLAIM, List.class);
     }
 
 
-    private Claims getClaimsFromToken(String token) {
+    private Claims getClaims(String token) {
         return Jwts.parser()
                 .verifyWith(getSecretKey())
                 .build()
