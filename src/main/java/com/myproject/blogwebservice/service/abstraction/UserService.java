@@ -6,6 +6,8 @@ public interface UserService {
 
     boolean existsWithUsername(String username);
 
+    AppUser create(AppUser user);
+
     AppUser createUser(AppUser user);
 
     AppUser createAdmin(AppUser user);
