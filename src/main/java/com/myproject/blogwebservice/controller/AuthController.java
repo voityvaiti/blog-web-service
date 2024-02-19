@@ -3,7 +3,6 @@ package com.myproject.blogwebservice.controller;
 import com.myproject.blogwebservice.dto.JwtRequestDto;
 import com.myproject.blogwebservice.dto.JwtResponseDto;
 import com.myproject.blogwebservice.dto.SignUpDto;
-import com.myproject.blogwebservice.entity.AppUser;
 import com.myproject.blogwebservice.exception.UserDuplicationException;
 import com.myproject.blogwebservice.service.abstraction.AuthService;
 import com.myproject.blogwebservice.service.abstraction.UserService;
@@ -38,14 +37,14 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<Void> createUser(@RequestBody @Valid SignUpDto signUpDto) throws UserDuplicationException {
+    public ResponseEntity<JwtResponseDto> createUser(@RequestBody @Valid SignUpDto signUpDto) throws UserDuplicationException {
 
-        AppUser user = signUpDto.toAppUser();
+        userUniquenessValidator.validate(signUpDto.toAppUser());
 
-        userUniquenessValidator.validate(user);
+        userService.createUser(signUpDto.toAppUser());
 
-        userService.createUser(user);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        String token = authService.generateTokenByCredentials(signUpDto.getUsername(), signUpDto.getPassword());
+        return new ResponseEntity<>(new JwtResponseDto(token), HttpStatus.CREATED);
     }
 
 }
