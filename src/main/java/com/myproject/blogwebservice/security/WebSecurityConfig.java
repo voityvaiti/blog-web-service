@@ -1,6 +1,7 @@
 package com.myproject.blogwebservice.security;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -21,6 +22,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
 
+import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
+
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -28,11 +31,17 @@ public class WebSecurityConfig {
 
     private final JwtRequestFilter jwtRequestFilter;
 
+    @Value("${api-prefix}")
+    private String apiPrefix;
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         return http.authorizeHttpRequests(authorize -> authorize
-                        .anyRequest().permitAll()
+                                .requestMatchers(antMatcher(apiPrefix + "/auth/**")).permitAll()
+
+                                .requestMatchers(antMatcher("/error")).permitAll()
+                                .anyRequest().authenticated()
 
                 ).addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
 
