@@ -2,6 +2,7 @@ package com.myproject.blogwebservice.service.impl;
 
 import com.myproject.blogwebservice.entity.AppUser;
 import com.myproject.blogwebservice.entity.Role;
+import com.myproject.blogwebservice.exception.ResourceNotFoundException;
 import com.myproject.blogwebservice.repository.UserRepository;
 import com.myproject.blogwebservice.service.abstraction.UserService;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,12 @@ public class UserServiceImpl implements UserService {
     public boolean existsWithUsername(String username) {
         return userRepository.existsByUsername(username);
     }
+
+    @Override
+    public AppUser getByUsername(String username) {
+        return userRepository.findByUsername(username).orElseThrow(() -> new ResourceNotFoundException("User not found with username: " + username));
+    }
+
 
     public AppUser create(AppUser user) {
 
