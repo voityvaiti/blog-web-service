@@ -29,7 +29,7 @@ public class AuthController {
 
 
     @PostMapping("/login")
-    public ResponseEntity<JwtResponseDto> createAuthToken(@RequestBody JwtRequestDto jwtRequestDto) {
+    public ResponseEntity<JwtResponseDto> logIn(@RequestBody JwtRequestDto jwtRequestDto) {
 
         String token = authService.generateTokenByCredentials(jwtRequestDto.getUsername(), jwtRequestDto.getPassword());
 
@@ -37,7 +37,7 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<JwtResponseDto> createUser(@RequestBody @Valid SignUpDto signUpDto) throws UserDuplicationException {
+    public ResponseEntity<JwtResponseDto> signUp(@RequestBody @Valid SignUpDto signUpDto) throws UserDuplicationException {
 
         userUniquenessValidator.validate(signUpDto.toAppUser());
 
