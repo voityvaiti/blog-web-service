@@ -37,7 +37,6 @@ public class Post {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    @NotNull
     private AppUser user;
 
 }

@@ -2,10 +2,12 @@ package com.myproject.blogwebservice.controller;
 
 import com.myproject.blogwebservice.entity.Post;
 import com.myproject.blogwebservice.service.abstraction.PostService;
+import com.myproject.blogwebservice.service.abstraction.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,6 +19,8 @@ import java.util.UUID;
 public class PostController {
 
     private final PostService postService;
+
+    private final UserService userService;
 
 
     @GetMapping
@@ -30,7 +34,9 @@ public class PostController {
     }
 
     @PostMapping
-    public ResponseEntity<Post> create(@RequestBody @Valid Post post) {
+    public ResponseEntity<Post> create(@RequestBody @Valid Post post, Authentication authentication) {
+
+        post.setUser(userService.getByUsername(authentication.getName()));
 
         Post createdPost = postService.create(post);
 
