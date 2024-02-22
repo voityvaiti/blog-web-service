@@ -50,9 +50,4 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(new ErrorDetailsDto(LocalDateTime.now(), "Wrong credentials!"), HttpStatus.UNAUTHORIZED);
     }
 
-    @ExceptionHandler({ExpiredJwtException.class, MalformedJwtException.class, SignatureException.class})
-    public ResponseEntity<Object> handleJwtExceptions(JwtException e) {
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
-    }
-
 }
