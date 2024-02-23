@@ -1,5 +1,6 @@
 package com.myproject.blogwebservice.controller;
 
+import com.myproject.blogwebservice.entity.AppUser;
 import com.myproject.blogwebservice.entity.Post;
 import com.myproject.blogwebservice.service.abstraction.PostService;
 import com.myproject.blogwebservice.service.abstraction.UserService;
@@ -26,6 +27,14 @@ public class PostController {
     @GetMapping
     public ResponseEntity<List<Post>> getAll() {
         return ResponseEntity.ok(postService.getAll());
+    }
+
+    @GetMapping("/current-user")
+    public ResponseEntity<List<Post>> getAllByAuth(Authentication authentication) {
+
+        AppUser user = userService.getByUsername(authentication.getName());
+
+        return ResponseEntity.ok(postService.getAllByUserId(user.getId()));
     }
 
     @GetMapping("/{id}")
