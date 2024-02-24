@@ -2,10 +2,6 @@ package com.myproject.blogwebservice.exception.exceptionhandler;
 
 import com.myproject.blogwebservice.exception.ResourceNotFoundException;
 import com.myproject.blogwebservice.exception.UserDuplicationException;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.security.SignatureException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
