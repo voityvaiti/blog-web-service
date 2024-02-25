@@ -6,6 +6,8 @@ import com.myproject.blogwebservice.service.abstraction.PostService;
 import com.myproject.blogwebservice.service.abstraction.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -24,9 +26,12 @@ public class PostController {
     private final UserService userService;
 
 
+    
     @GetMapping
-    public ResponseEntity<List<Post>> getAll() {
-        return ResponseEntity.ok(postService.getAll());
+    public ResponseEntity<Page<Post>> getAllPage(@RequestParam(defaultValue = "0", name = "page-number") Integer pageNumber,
+                                                 @RequestParam(defaultValue = "10", name = "page-size") Integer pageSize) {
+
+        return ResponseEntity.ok(postService.getAll(PageRequest.of(pageNumber, pageSize)));
     }
 
     @GetMapping("/current-user")
