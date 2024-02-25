@@ -5,6 +5,8 @@ import com.myproject.blogwebservice.exception.ResourceNotFoundException;
 import com.myproject.blogwebservice.repository.PostRepository;
 import com.myproject.blogwebservice.service.abstraction.PostService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -21,6 +23,11 @@ public class PostServiceImpl implements PostService {
     @Override
     public List<Post> getAll() {
         return postRepository.findAll();
+    }
+
+    @Override
+    public Page<Post> getAll(Pageable pageable) {
+        return postRepository.findAll(pageable);
     }
 
     @Override
