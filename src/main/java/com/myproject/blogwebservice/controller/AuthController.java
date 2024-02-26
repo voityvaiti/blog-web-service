@@ -29,7 +29,7 @@ public class AuthController {
 
 
     @PostMapping("/login")
-    public ResponseEntity<JwtResponseDto> logIn(@RequestBody JwtRequestDto jwtRequestDto) {
+    public ResponseEntity<JwtResponseDto> logIn(@RequestBody @Valid JwtRequestDto jwtRequestDto) {
 
         String token = authService.generateTokenByCredentials(jwtRequestDto.getUsername(), jwtRequestDto.getPassword());
 
