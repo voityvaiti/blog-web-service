@@ -31,8 +31,8 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<Post> getAllByUserId(UUID id) {
-        return postRepository.findAllByUserId(id);
+    public Page<Post> getAllByUserId(UUID id, Pageable pageable) {
+        return postRepository.findAllByUserId(id, pageable);
     }
 
     @Override

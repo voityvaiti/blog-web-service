@@ -13,7 +13,7 @@ public interface PostService {
 
     Page<Post> getAll(Pageable pageable);
 
-    List<Post> getAllByUserId(UUID id);
+    Page<Post> getAllByUserId(UUID id, Pageable pageable);
 
     Post getById(UUID id);
 
