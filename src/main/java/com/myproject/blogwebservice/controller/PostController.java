@@ -8,18 +8,21 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
 @RequestMapping("${api-prefix}/posts")
 @RequiredArgsConstructor
 public class PostController {
+
+    private static final String SORT_PROPERTY = "publicationDateTime";
+
 
     private final PostService postService;
 
@@ -31,15 +34,17 @@ public class PostController {
     public ResponseEntity<Page<Post>> getAllPage(@RequestParam(defaultValue = "0", name = "page-number") Integer pageNumber,
                                                  @RequestParam(defaultValue = "10", name = "page-size") Integer pageSize) {
 
-        return ResponseEntity.ok(postService.getAll(PageRequest.of(pageNumber, pageSize)));
+        return ResponseEntity.ok(postService.getAll(PageRequest.of(pageNumber, pageSize, Sort.by(SORT_PROPERTY).descending())));
     }
 
     @GetMapping("/current-user")
-    public ResponseEntity<List<Post>> getAllByAuth(Authentication authentication) {
+    public ResponseEntity<Page<Post>> getAllByAuth(@RequestParam(defaultValue = "0", name = "page-number") Integer pageNumber,
+                                                   @RequestParam(defaultValue = "10", name = "page-size") Integer pageSize,
+                                                   Authentication authentication) {
 
         AppUser user = userService.getByUsername(authentication.getName());
 
-        return ResponseEntity.ok(postService.getAllByUserId(user.getId()));
+        return ResponseEntity.ok(postService.getAllByUserId(user.getId(), PageRequest.of(pageNumber, pageSize, Sort.by(SORT_PROPERTY).descending())));
     }
 
     @GetMapping("/{id}")
