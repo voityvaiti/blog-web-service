@@ -17,6 +17,8 @@ public interface PostService {
 
     Post getById(UUID id);
 
+    boolean isPostOfUser(UUID id, String username);
+
     Post create(Post post);
 
     void delete(UUID id);

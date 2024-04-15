@@ -41,6 +41,11 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public boolean isPostOfUser(UUID id, String username) {
+        return postRepository.existsByIdAndUserUsername(id, username);
+    }
+
+    @Override
     public Post create(Post post) {
 
         post.setPublicationDateTime(LocalDateTime.now());

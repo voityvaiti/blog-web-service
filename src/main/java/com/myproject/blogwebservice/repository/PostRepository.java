@@ -13,4 +13,6 @@ public interface PostRepository extends JpaRepository<Post, UUID> {
 
     Page<Post> findAllByUserId(UUID id, Pageable pageable);
 
+    boolean existsByIdAndUserUsername(UUID id, String username);
+
 }
