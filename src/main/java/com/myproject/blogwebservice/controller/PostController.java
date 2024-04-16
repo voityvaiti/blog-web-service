@@ -62,9 +62,12 @@ public class PostController {
         return new ResponseEntity<>(createdPost, HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable UUID id) {
+    @DeleteMapping("/current-user/{id}")
+    public ResponseEntity<Void> delete(@PathVariable UUID id, Authentication authentication) {
 
+        if(!postService.isPostOfUser(id, authentication.getName())) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
         postService.delete(id);
 
         return new ResponseEntity<>(HttpStatus.OK);
