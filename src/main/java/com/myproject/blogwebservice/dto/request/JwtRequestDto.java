@@ -1,4 +1,4 @@
-package com.myproject.blogwebservice.dto;
+package com.myproject.blogwebservice.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;

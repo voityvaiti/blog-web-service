@@ -1,8 +1,8 @@
 package com.myproject.blogwebservice.controller;
 
-import com.myproject.blogwebservice.dto.JwtRequestDto;
-import com.myproject.blogwebservice.dto.JwtResponseDto;
-import com.myproject.blogwebservice.dto.SignUpDto;
+import com.myproject.blogwebservice.dto.request.JwtRequestDto;
+import com.myproject.blogwebservice.dto.response.JwtResponseDto;
+import com.myproject.blogwebservice.dto.request.SignUpDto;
 import com.myproject.blogwebservice.exception.UserDuplicationException;
 import com.myproject.blogwebservice.service.abstraction.AuthService;
 import com.myproject.blogwebservice.service.abstraction.UserService;

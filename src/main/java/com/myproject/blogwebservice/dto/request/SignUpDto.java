@@ -1,4 +1,4 @@
-package com.myproject.blogwebservice.dto;
+package com.myproject.blogwebservice.dto.request;
 
 import com.myproject.blogwebservice.entity.AppUser;
 import com.myproject.blogwebservice.validation.annotation.NicknameConstraints;

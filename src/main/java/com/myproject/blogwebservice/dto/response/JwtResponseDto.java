@@ -1,4 +1,4 @@
-package com.myproject.blogwebservice.dto;
+package com.myproject.blogwebservice.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
