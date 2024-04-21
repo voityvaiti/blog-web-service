@@ -1,4 +1,4 @@
-package com.myproject.blogwebservice.validation.annotation;
+package com.myproject.blogwebservice.validation.annotation.post;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
@@ -10,15 +10,15 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@NotBlank(message = "Nickname is required.")
-@Size(max = 30, message = "Nickname cannot be longer then 30 characters.")
+@NotBlank(message = "Post title is blank.")
+@Size(max = 99, message = "Title can't be longer than 99 characters.")
 
 @Target({ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = {})
-public @interface NicknameConstraints {
+public @interface TitleConstraints {
 
-    String message() default "Invalid nickname.";
+    String message() default "Invalid title.";
 
     Class<?>[] groups() default {};
 

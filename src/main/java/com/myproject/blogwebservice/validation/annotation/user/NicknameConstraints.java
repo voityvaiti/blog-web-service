@@ -1,4 +1,4 @@
-package com.myproject.blogwebservice.validation.annotation;
+package com.myproject.blogwebservice.validation.annotation.user;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
@@ -10,16 +10,15 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-
-@NotBlank(message = "Username is required.")
-@Size(min = 3, max = 20, message = "Username must be between 3 and 20 characters.")
+@NotBlank(message = "Nickname is required.")
+@Size(max = 30, message = "Nickname cannot be longer then 30 characters.")
 
 @Target({ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = {})
-public @interface UsernameConstraints {
+public @interface NicknameConstraints {
 
-    String message() default "Invalid username.";
+    String message() default "Invalid nickname.";
 
     Class<?>[] groups() default {};
 

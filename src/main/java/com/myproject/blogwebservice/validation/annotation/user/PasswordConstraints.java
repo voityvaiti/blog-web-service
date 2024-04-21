@@ -1,4 +1,4 @@
-package com.myproject.blogwebservice.validation.annotation;
+package com.myproject.blogwebservice.validation.annotation.user;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
