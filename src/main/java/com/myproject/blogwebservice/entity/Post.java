@@ -1,8 +1,8 @@
 package com.myproject.blogwebservice.entity;
 
+import com.myproject.blogwebservice.validation.annotation.post.ArticleConstraints;
+import com.myproject.blogwebservice.validation.annotation.post.TitleConstraints;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,13 +22,11 @@ public class Post {
     private UUID id;
 
     @Column(name = "title")
-    @NotBlank(message = "Post title is blank.")
-    @Size(max = 99, message = "Title can't be longer than 99 characters.")
+    @TitleConstraints
     private String title;
 
     @Column(name = "article")
-    @NotBlank(message = "Post article is blank.")
-    @Size(max = 999, message = "Article can't be longer than 999 characters.")
+    @ArticleConstraints
     private String article;
 
     @Column(name = "publication_datetime")

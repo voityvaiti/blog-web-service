@@ -1,9 +1,9 @@
 package com.myproject.blogwebservice.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.myproject.blogwebservice.validation.annotation.NicknameConstraints;
-import com.myproject.blogwebservice.validation.annotation.PasswordConstraints;
-import com.myproject.blogwebservice.validation.annotation.UsernameConstraints;
+import com.myproject.blogwebservice.validation.annotation.user.NicknameConstraints;
+import com.myproject.blogwebservice.validation.annotation.user.PasswordConstraints;
+import com.myproject.blogwebservice.validation.annotation.user.UsernameConstraints;
 import jakarta.persistence.*;
 import lombok.*;
 
