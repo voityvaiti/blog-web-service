@@ -1,9 +1,9 @@
 package com.myproject.blogwebservice.dto.request;
 
 import com.myproject.blogwebservice.entity.AppUser;
-import com.myproject.blogwebservice.validation.annotation.NicknameConstraints;
-import com.myproject.blogwebservice.validation.annotation.PasswordConstraints;
-import com.myproject.blogwebservice.validation.annotation.UsernameConstraints;
+import com.myproject.blogwebservice.validation.annotation.user.NicknameConstraints;
+import com.myproject.blogwebservice.validation.annotation.user.PasswordConstraints;
+import com.myproject.blogwebservice.validation.annotation.user.UsernameConstraints;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SignUpDto {
+public class SignUpRequestDto {
 
     @UsernameConstraints
     private String username;
