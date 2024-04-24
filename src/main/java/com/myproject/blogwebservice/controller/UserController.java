@@ -1,8 +1,11 @@
 package com.myproject.blogwebservice.controller;
 
+import com.myproject.blogwebservice.dto.response.UserResponseDto;
 import com.myproject.blogwebservice.entity.AppUser;
+import com.myproject.blogwebservice.mapper.UserMapper;
 import com.myproject.blogwebservice.service.abstraction.UserService;
 import lombok.RequiredArgsConstructor;
+import org.mapstruct.factory.Mappers;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -17,13 +20,18 @@ public class UserController {
 
     private final UserService userService;
 
+    private final UserMapper userMapper = Mappers.getMapper(UserMapper.class);
+
+
     @GetMapping("/current")
-    public ResponseEntity<AppUser> getCurrent(Authentication authentication) {
+    public ResponseEntity<UserResponseDto> getCurrent(Authentication authentication) {
 
         if(authentication == null) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
-        return ResponseEntity.ok(userService.getByUsername(authentication.getName()));
+        AppUser currentUser = userService.getByUsername(authentication.getName());
+
+        return ResponseEntity.ok(userMapper.mapToUserResponseDto(currentUser));
     }
 
 }

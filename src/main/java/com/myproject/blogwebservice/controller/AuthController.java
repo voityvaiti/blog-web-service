@@ -2,13 +2,16 @@ package com.myproject.blogwebservice.controller;
 
 import com.myproject.blogwebservice.dto.request.JwtRequestDto;
 import com.myproject.blogwebservice.dto.response.JwtResponseDto;
-import com.myproject.blogwebservice.dto.request.SignUpDto;
+import com.myproject.blogwebservice.dto.request.SignUpRequestDto;
+import com.myproject.blogwebservice.entity.AppUser;
 import com.myproject.blogwebservice.exception.UserDuplicationException;
+import com.myproject.blogwebservice.mapper.UserMapper;
 import com.myproject.blogwebservice.service.abstraction.AuthService;
 import com.myproject.blogwebservice.service.abstraction.UserService;
 import com.myproject.blogwebservice.validation.validator.UserUniquenessValidator;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.mapstruct.factory.Mappers;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,10 +25,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final AuthService authService;
-
     private final UserService userService;
 
     private final UserUniquenessValidator userUniquenessValidator;
+
+    private final UserMapper userMapper = Mappers.getMapper(UserMapper.class);
 
 
     @PostMapping("/login")
@@ -37,13 +41,14 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<JwtResponseDto> signUp(@RequestBody @Valid SignUpDto signUpDto) throws UserDuplicationException {
+    public ResponseEntity<JwtResponseDto> signUp(@RequestBody @Valid SignUpRequestDto signUpRequestDto) throws UserDuplicationException {
 
-        userUniquenessValidator.validate(signUpDto.toAppUser());
+        AppUser userToRegister = userMapper.mapToUser(signUpRequestDto);
+        userUniquenessValidator.validate(userToRegister);
 
-        userService.createUser(signUpDto.toAppUser());
+        userService.createUser(userToRegister);
 
-        String token = authService.generateTokenByCredentials(signUpDto.getUsername(), signUpDto.getPassword());
+        String token = authService.generateTokenByCredentials(signUpRequestDto.getUsername(), signUpRequestDto.getPassword());
         return new ResponseEntity<>(new JwtResponseDto(token), HttpStatus.CREATED);
     }
 

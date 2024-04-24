@@ -1,11 +1,16 @@
 package com.myproject.blogwebservice.controller;
 
+import com.myproject.blogwebservice.dto.request.PostRequestDto;
+import com.myproject.blogwebservice.dto.response.PostResponseDto;
 import com.myproject.blogwebservice.entity.AppUser;
 import com.myproject.blogwebservice.entity.Post;
+import com.myproject.blogwebservice.mapper.PostMapper;
+import com.myproject.blogwebservice.mapper.UserMapper;
 import com.myproject.blogwebservice.service.abstraction.PostService;
 import com.myproject.blogwebservice.service.abstraction.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.mapstruct.factory.Mappers;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -25,41 +30,50 @@ public class PostController {
 
 
     private final PostService postService;
-
     private final UserService userService;
+
+    private final PostMapper postMapper = Mappers.getMapper(PostMapper.class);
 
 
     
     @GetMapping
-    public ResponseEntity<Page<Post>> getAllPage(@RequestParam(defaultValue = "0", name = "page-number") Integer pageNumber,
-                                                 @RequestParam(defaultValue = "10", name = "page-size") Integer pageSize) {
+    public ResponseEntity<Page<PostResponseDto>> getAllPage(@RequestParam(defaultValue = "0", name = "page-number") Integer pageNumber,
+                                                            @RequestParam(defaultValue = "10", name = "page-size") Integer pageSize) {
 
-        return ResponseEntity.ok(postService.getAll(PageRequest.of(pageNumber, pageSize, Sort.by(SORT_PROPERTY).descending())));
+        Page<Post> postPage = postService.getAll(PageRequest.of(pageNumber, pageSize, Sort.by(SORT_PROPERTY).descending()));
+
+        return ResponseEntity.ok(postPage.map(postMapper::mapToPostResponseDto));
     }
 
     @GetMapping("/current-user")
-    public ResponseEntity<Page<Post>> getAllByAuth(@RequestParam(defaultValue = "0", name = "page-number") Integer pageNumber,
+    public ResponseEntity<Page<PostResponseDto>> getAllByAuth(@RequestParam(defaultValue = "0", name = "page-number") Integer pageNumber,
                                                    @RequestParam(defaultValue = "10", name = "page-size") Integer pageSize,
                                                    Authentication authentication) {
 
         AppUser user = userService.getByUsername(authentication.getName());
 
-        return ResponseEntity.ok(postService.getAllByUserId(user.getId(), PageRequest.of(pageNumber, pageSize, Sort.by(SORT_PROPERTY).descending())));
+        Page<Post> postPage = postService.getAllByUserId(user.getId(), PageRequest.of(pageNumber, pageSize, Sort.by(SORT_PROPERTY).descending()));
+
+        return ResponseEntity.ok(postPage.map(postMapper::mapToPostResponseDto));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Post> get(@PathVariable UUID id) {
-        return ResponseEntity.ok(postService.getById(id));
+    public ResponseEntity<PostResponseDto> get(@PathVariable UUID id) {
+
+        Post post = postService.getById(id);
+
+        return ResponseEntity.ok(postMapper.mapToPostResponseDto(post));
     }
 
     @PostMapping
-    public ResponseEntity<Post> create(@RequestBody @Valid Post post, Authentication authentication) {
+    public ResponseEntity<PostResponseDto> create(@RequestBody @Valid PostRequestDto postRequestDto, Authentication authentication) {
+
+        Post post = postMapper.mapToPost(postRequestDto);
 
         post.setUser(userService.getByUsername(authentication.getName()));
-
         Post createdPost = postService.create(post);
 
-        return new ResponseEntity<>(createdPost, HttpStatus.CREATED);
+        return new ResponseEntity<>(postMapper.mapToPostResponseDto(createdPost), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/current-user/{id}")
