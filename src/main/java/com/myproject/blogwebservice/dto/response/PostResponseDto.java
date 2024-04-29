@@ -1,6 +1,5 @@
 package com.myproject.blogwebservice.dto.response;
 
-import com.myproject.blogwebservice.entity.AppUser;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
