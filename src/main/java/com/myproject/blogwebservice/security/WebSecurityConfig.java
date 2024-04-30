@@ -33,15 +33,23 @@ public class WebSecurityConfig {
 
     @Value("${api-prefix}")
     private String apiPrefix;
+    @Value("${springdoc.api-docs.path}")
+    private String docsPath;
+    @Value("${springdoc.swagger-ui.path}")
+    private String swaggerUiPath;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         return http.authorizeHttpRequests(authorize -> authorize
-                                .requestMatchers(antMatcher(apiPrefix + "/auth/**")).permitAll()
+                        .requestMatchers(antMatcher(apiPrefix + "/auth/**")).permitAll()
 
-                                .requestMatchers(antMatcher("/error")).permitAll()
-                                .anyRequest().authenticated()
+                        .requestMatchers(antMatcher(docsPath + "/**")).permitAll()
+                        .requestMatchers(antMatcher(swaggerUiPath + "/**")).permitAll()
+
+                        .requestMatchers(antMatcher("/error")).permitAll()
+
+                        .anyRequest().authenticated()
 
                 ).addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
 
