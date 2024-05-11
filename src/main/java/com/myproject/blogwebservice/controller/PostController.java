@@ -5,7 +5,6 @@ import com.myproject.blogwebservice.dto.response.PostResponseDto;
 import com.myproject.blogwebservice.entity.AppUser;
 import com.myproject.blogwebservice.entity.Post;
 import com.myproject.blogwebservice.mapper.PostMapper;
-import com.myproject.blogwebservice.mapper.UserMapper;
 import com.myproject.blogwebservice.service.abstraction.PostService;
 import com.myproject.blogwebservice.service.abstraction.UserService;
 import jakarta.validation.Valid;
@@ -26,7 +25,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class PostController {
 
-    private static final String SORT_PROPERTY = "publicationDateTime";
+    protected static final Sort DEFAULT_SORT = Sort.by("publicationDateTime").descending();
 
 
     private final PostService postService;
@@ -40,7 +39,7 @@ public class PostController {
     public ResponseEntity<Page<PostResponseDto>> getAllPage(@RequestParam(defaultValue = "0", name = "page-number") Integer pageNumber,
                                                             @RequestParam(defaultValue = "10", name = "page-size") Integer pageSize) {
 
-        Page<Post> postPage = postService.getAll(PageRequest.of(pageNumber, pageSize, Sort.by(SORT_PROPERTY).descending()));
+        Page<Post> postPage = postService.getAll(PageRequest.of(pageNumber, pageSize, DEFAULT_SORT));
 
         return ResponseEntity.ok(postPage.map(postMapper::mapToPostResponseDto));
     }
@@ -52,7 +51,7 @@ public class PostController {
 
         AppUser user = userService.getByUsername(authentication.getName());
 
-        Page<Post> postPage = postService.getAllByUserId(user.getId(), PageRequest.of(pageNumber, pageSize, Sort.by(SORT_PROPERTY).descending()));
+        Page<Post> postPage = postService.getAllByUserId(user.getId(), PageRequest.of(pageNumber, pageSize, DEFAULT_SORT));
 
         return ResponseEntity.ok(postPage.map(postMapper::mapToPostResponseDto));
     }
