@@ -15,6 +15,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -79,7 +80,7 @@ public class PostController {
     public ResponseEntity<Void> delete(@PathVariable UUID id, Authentication authentication) {
 
         if(!postService.isPostOfUser(id, authentication.getName())) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            throw new AccessDeniedException("Can't delete post of another user.");
         }
         postService.delete(id);
 
