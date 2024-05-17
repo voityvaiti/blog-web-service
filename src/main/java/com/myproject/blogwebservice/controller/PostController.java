@@ -7,6 +7,8 @@ import com.myproject.blogwebservice.entity.Post;
 import com.myproject.blogwebservice.mapper.PostMapper;
 import com.myproject.blogwebservice.service.abstraction.PostService;
 import com.myproject.blogwebservice.service.abstraction.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
@@ -24,6 +26,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("${api-prefix}/posts")
 @RequiredArgsConstructor
+@Tag(name = "Post")
 public class PostController {
 
     protected static final Sort DEFAULT_SORT = Sort.by("publicationDateTime").descending();
@@ -35,7 +38,7 @@ public class PostController {
     private final PostMapper postMapper = Mappers.getMapper(PostMapper.class);
 
 
-    
+    @Operation(summary = "Get all posts page", description = "Returns page of posts")
     @GetMapping
     public ResponseEntity<Page<PostResponseDto>> getAllPage(@RequestParam(defaultValue = "0", name = "page-number") Integer pageNumber,
                                                             @RequestParam(defaultValue = "10", name = "page-size") Integer pageSize) {
@@ -45,6 +48,7 @@ public class PostController {
         return ResponseEntity.ok(postPage.map(postMapper::mapToPostResponseDto));
     }
 
+    @Operation(summary = "Get all posts page by auth", description = "Returns posts page of currently authenticated user")
     @GetMapping("/current-user")
     public ResponseEntity<Page<PostResponseDto>> getAllByAuth(@RequestParam(defaultValue = "0", name = "page-number") Integer pageNumber,
                                                    @RequestParam(defaultValue = "10", name = "page-size") Integer pageSize,
@@ -57,6 +61,7 @@ public class PostController {
         return ResponseEntity.ok(postPage.map(postMapper::mapToPostResponseDto));
     }
 
+    @Operation(summary = "Get post by ID", description = "Returns posts with specific ID")
     @GetMapping("/{id}")
     public ResponseEntity<PostResponseDto> get(@PathVariable UUID id) {
 
@@ -65,6 +70,7 @@ public class PostController {
         return ResponseEntity.ok(postMapper.mapToPostResponseDto(post));
     }
 
+    @Operation(summary = "Create post", description = "Creates post and wires currently authenticated user as creator")
     @PostMapping
     public ResponseEntity<PostResponseDto> create(@RequestBody @Valid PostRequestDto postRequestDto, Authentication authentication) {
 
@@ -76,6 +82,7 @@ public class PostController {
         return new ResponseEntity<>(postMapper.mapToPostResponseDto(createdPost), HttpStatus.CREATED);
     }
 
+    @Operation(summary = "Delete post", description = "Deletes post only if currently authenticated user is creator")
     @DeleteMapping("/current-user/{id}")
     public ResponseEntity<Void> delete(@PathVariable UUID id, Authentication authentication) {
 
