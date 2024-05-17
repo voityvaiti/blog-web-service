@@ -9,6 +9,8 @@ import com.myproject.blogwebservice.mapper.UserMapper;
 import com.myproject.blogwebservice.service.abstraction.AuthService;
 import com.myproject.blogwebservice.service.abstraction.UserService;
 import com.myproject.blogwebservice.validation.validator.UserUniquenessValidator;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("${api-prefix}/auth")
 @RequiredArgsConstructor
+@Tag(name = "Authentication")
 public class AuthController {
 
     private final AuthService authService;
@@ -32,6 +35,7 @@ public class AuthController {
     private final UserMapper userMapper = Mappers.getMapper(UserMapper.class);
 
 
+    @Operation(summary = "Log In", description = "Returns authentication token")
     @PostMapping("/login")
     public ResponseEntity<JwtResponseDto> logIn(@RequestBody @Valid JwtRequestDto jwtRequestDto) {
 
@@ -40,6 +44,7 @@ public class AuthController {
         return ResponseEntity.ok(new JwtResponseDto(token));
     }
 
+    @Operation(summary = "Sign Up", description = "Registers a new user and sends authentication token")
     @PostMapping("/signup")
     public ResponseEntity<JwtResponseDto> signUp(@RequestBody @Valid SignUpRequestDto signUpRequestDto) throws UserDuplicationException {
 
