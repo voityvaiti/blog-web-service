@@ -4,6 +4,8 @@ import com.myproject.blogwebservice.dto.response.UserResponseDto;
 import com.myproject.blogwebservice.entity.AppUser;
 import com.myproject.blogwebservice.mapper.UserMapper;
 import com.myproject.blogwebservice.service.abstraction.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.http.HttpStatus;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("${api-prefix}/users")
 @RequiredArgsConstructor
+@Tag(name = "User")
 public class UserController {
 
     private final UserService userService;
@@ -23,6 +26,7 @@ public class UserController {
     private final UserMapper userMapper = Mappers.getMapper(UserMapper.class);
 
 
+    @Operation(summary = "Get current user", description = "Returns currently authenticated user")
     @GetMapping("/current")
     public ResponseEntity<UserResponseDto> getCurrent(Authentication authentication) {
 
