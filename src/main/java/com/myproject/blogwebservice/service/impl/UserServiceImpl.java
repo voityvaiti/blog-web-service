@@ -6,10 +6,12 @@ import com.myproject.blogwebservice.exception.ResourceNotFoundException;
 import com.myproject.blogwebservice.repository.UserRepository;
 import com.myproject.blogwebservice.service.abstraction.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
@@ -25,6 +27,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public AppUser getByUsername(String username) {
+        log.debug("Looking for User with username: {}", username);
+
         return userRepository.findByUsername(username).orElseThrow(() -> new ResourceNotFoundException("User not found with username: " + username));
     }
 
@@ -32,6 +36,8 @@ public class UserServiceImpl implements UserService {
     public AppUser create(AppUser user) {
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        log.debug("Saving new User: {}", user);
         return userRepository.save(user);
     }
 
