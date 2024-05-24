@@ -1,6 +1,5 @@
 package com.myproject.blogwebservice.dto.request;
 
-import com.myproject.blogwebservice.entity.AppUser;
 import com.myproject.blogwebservice.validation.annotation.user.NicknameConstraints;
 import com.myproject.blogwebservice.validation.annotation.user.PasswordConstraints;
 import com.myproject.blogwebservice.validation.annotation.user.UsernameConstraints;
@@ -21,15 +20,5 @@ public class SignUpRequestDto {
 
     @NicknameConstraints
     private String nickname;
-
-    public AppUser toAppUser() {
-        AppUser user = new AppUser();
-
-        user.setUsername(this.username);
-        user.setPassword(this.password);
-        user.setNickname(this.nickname);
-
-        return user;
-    }
 
 }
