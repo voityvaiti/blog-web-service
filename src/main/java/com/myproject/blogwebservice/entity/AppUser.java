@@ -6,13 +6,18 @@ import com.myproject.blogwebservice.validation.annotation.user.PasswordConstrain
 import com.myproject.blogwebservice.validation.annotation.user.UsernameConstraints;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 @Entity
 @Table(name = "usr")
+@EntityListeners(AuditingEntityListener.class)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -45,5 +50,14 @@ public class AppUser {
     @ToString.Exclude
     @JsonIgnore
     private List<Post> posts = new ArrayList<>();
+
+
+    @CreatedDate
+    @Column(name = "created_date")
+    private ZonedDateTime createdDate;
+
+    @LastModifiedDate
+    @Column(name = "updated_date")
+    private ZonedDateTime updatedDate;
 
 }
