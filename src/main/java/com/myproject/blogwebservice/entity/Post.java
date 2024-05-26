@@ -6,12 +6,16 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.UUID;
 
 @Entity
 @Table(name = "post")
+@EntityListeners(AuditingEntityListener.class)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -29,11 +33,17 @@ public class Post {
     @ArticleConstraints
     private String article;
 
-    @Column(name = "publication_datetime")
-    private LocalDateTime publicationDateTime;
-
     @ManyToOne
     @JoinColumn(name = "user_id")
     private AppUser user;
+
+
+    @CreatedDate
+    @Column(name = "created_date")
+    private ZonedDateTime createdDate;
+
+    @LastModifiedDate
+    @Column(name = "updated_date")
+    private ZonedDateTime updatedDate;
 
 }
