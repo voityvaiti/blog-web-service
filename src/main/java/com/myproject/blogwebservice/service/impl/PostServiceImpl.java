@@ -61,8 +61,6 @@ public class PostServiceImpl implements PostService {
     @Override
     public Post create(Post post) {
 
-        post.setPublicationDateTime(LocalDateTime.now());
-
         log.debug("Saving new Post: {}", post);
 
         return postRepository.save(post);
