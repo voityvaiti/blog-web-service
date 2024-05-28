@@ -29,7 +29,7 @@ import java.util.UUID;
 @Tag(name = "Post")
 public class PostController {
 
-    protected static final Sort DEFAULT_SORT = Sort.by("publicationDateTime").descending();
+    protected static final Sort DEFAULT_SORT = Sort.by("createdDate").descending();
 
 
     private final PostService postService;
