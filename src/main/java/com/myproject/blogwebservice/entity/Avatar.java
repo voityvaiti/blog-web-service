@@ -1,9 +1,7 @@
 package com.myproject.blogwebservice.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -12,23 +10,26 @@ import java.time.ZonedDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "images")
+@Table(name = "avatars")
 @EntityListeners(AuditingEntityListener.class)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Image {
+public class Avatar {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id")
     private UUID id;
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "public_id")
+    private String publicId;
 
     @Column(name = "url")
     private String url;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private AppUser user;
 
 
     @CreatedDate
@@ -38,4 +39,5 @@ public class Image {
     @LastModifiedDate
     @Column(name = "updated_date")
     private ZonedDateTime updatedDate;
+
 }
