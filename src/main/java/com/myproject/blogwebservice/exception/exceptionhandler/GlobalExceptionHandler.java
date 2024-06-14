@@ -1,5 +1,6 @@
 package com.myproject.blogwebservice.exception.exceptionhandler;
 
+import com.myproject.blogwebservice.exception.CloudException;
 import com.myproject.blogwebservice.exception.ResourceNotFoundException;
 import com.myproject.blogwebservice.exception.UserDuplicationException;
 import org.springframework.http.HttpStatus;
@@ -44,6 +45,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Object> handleBadCredentialsException() {
 
         return new ResponseEntity<>(new ErrorDetailsDto(LocalDateTime.now(), "Wrong credentials!"), HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(CloudException.class)
+    public ResponseEntity<Object> handleCloudUploadingException(CloudException ex) {
+
+        return new ResponseEntity<>(new ErrorDetailsDto(LocalDateTime.now(), ex.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 }
