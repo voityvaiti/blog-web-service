@@ -20,4 +20,6 @@ public class UserResponseDto {
 
     private String nickname;
 
+    private String avatarUrl;
+
 }
