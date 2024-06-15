@@ -45,6 +45,10 @@ public class AppUser {
     @NicknameConstraints
     private String nickname;
 
+
+    @OneToOne(mappedBy = "user")
+    private Avatar avatar;
+
     @OneToMany(mappedBy = "user")
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
